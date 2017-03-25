@@ -30,6 +30,28 @@ describe('Template', function() {
                 ]
             })
         })
+
+        it('can build 2 times without duplicating', function() {
+            btnBuilder.setTitle('title')
+            btnBuilder.setMessage('message')
+            btnBuilder.setThumbnail('https://google.com')
+            btnBuilder.addAction('Buy', 'action=buy', Action.TYPE.POSTBACK)
+            btnBuilder.addAction('Sell', 'action=sell', 'text', Action.TYPE.POSTBACK)
+
+            let expecting = {
+                type: 'buttons',
+                thumbnailImageUrl: 'https://google.com',
+                title: 'title',
+                text: 'message',
+                actions: [
+                    {type: 'postback', label: 'Buy', data: 'action=buy'},
+                    {type: 'postback', label: 'Sell', data: 'action=sell', text: 'text'}
+                ]
+            }
+
+            btnBuilder.buildTemplate().should.be.eql(expecting)
+            btnBuilder.buildTemplate().should.be.eql(expecting)
+        })
     })
 
     describe('CarouselColumnTemplate', function() {
